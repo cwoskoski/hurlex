@@ -1,0 +1,64 @@
+<idea-plugin>
+    <id>com.github.chadw.intellijhurl</id>
+    <name>Hurlex - Hurl Language Support</name>
+    <vendor email="chadw@github.com" url="https://github.com/chadw/hurlex">chadw</vendor>
+
+    <description><![CDATA[
+        Full-featured language support for <a href="https://hurl.dev">Hurl</a> HTTP testing files.
+        <ul>
+            <li>Syntax highlighting with customizable colors</li>
+            <li>Code completion for HTTP methods, sections, predicates, and filters</li>
+            <li>Structure view showing request entries</li>
+            <li>Code folding for entries, sections, and multiline strings</li>
+            <li>Comment/uncomment support</li>
+            <li>Brace matching</li>
+            <li>Template variable references and find usages</li>
+            <li>Run configurations for executing .hurl files</li>
+            <li>Gutter run icons</li>
+        </ul>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Language -->
+        <fileType name="Hurl" implementationClass="com.github.chadw.intellijhurl.language.HurlFileType"
+                  fieldName="INSTANCE" language="Hurl" extensions="hurl"/>
+        <lang.parserDefinition language="Hurl"
+                               implementationClass="com.github.chadw.intellijhurl.parser.HurlParserDefinition"/>
+
+        <!-- Highlighting -->
+        <lang.syntaxHighlighterFactory language="Hurl"
+                                       implementationClass="com.github.chadw.intellijhurl.highlight.HurlSyntaxHighlighterFactory"/>
+        <annotator language="Hurl"
+                   implementationClass="com.github.chadw.intellijhurl.highlight.HurlAnnotator"/>
+        <colorSettingsPage implementation="com.github.chadw.intellijhurl.highlight.HurlColorSettingsPage"/>
+        <additionalTextAttributes scheme="Default" file="colorSchemes/HurlDefault.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="colorSchemes/HurlDarcula.xml"/>
+
+        <!-- Editor -->
+        <lang.commenter language="Hurl"
+                        implementationClass="com.github.chadw.intellijhurl.commenter.HurlCommenter"/>
+        <lang.braceMatcher language="Hurl"
+                           implementationClass="com.github.chadw.intellijhurl.brace.HurlBraceMatcher"/>
+        <lang.foldingBuilder language="Hurl"
+                             implementationClass="com.github.chadw.intellijhurl.folding.HurlFoldingBuilder"/>
+        <lang.psiStructureViewFactory language="Hurl"
+                                      implementationClass="com.github.chadw.intellijhurl.structure.HurlStructureViewFactory"/>
+
+        <!-- Intelligence -->
+        <completion.contributor language="Hurl"
+                                implementationClass="com.github.chadw.intellijhurl.completion.HurlCompletionContributor"/>
+        <lang.findUsagesProvider language="Hurl"
+                                 implementationClass="com.github.chadw.intellijhurl.reference.HurlFindUsagesProvider"/>
+        <psi.referenceContributor language="Hurl"
+                                  implementation="com.github.chadw.intellijhurl.reference.HurlReferenceContributor"/>
+
+        <!-- Run -->
+        <configurationType implementation="com.github.chadw.intellijhurl.run.HurlConfigurationType"/>
+        <runConfigurationProducer implementation="com.github.chadw.intellijhurl.run.HurlRunConfigurationProducer"/>
+        <runLineMarkerContributor language="Hurl"
+                                  implementationClass="com.github.chadw.intellijhurl.run.HurlLineMarkerProvider"/>
+    </extensions>
+</idea-plugin>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+    <option name="HURL_METHOD" baseAttributes="DEFAULT_KEYWORD"/>
+    <option name="HURL_URL" baseAttributes="DEFAULT_STRING"/>
+    <option name="HURL_HTTP_VERSION" baseAttributes="DEFAULT_KEYWORD"/>
+    <option name="HURL_STATUS_CODE" baseAttributes="DEFAULT_NUMBER"/>
+    <option name="HURL_SECTION" baseAttributes="DEFAULT_METADATA"/>
+    <option name="HURL_QUERY_KEYWORD" baseAttributes="DEFAULT_FUNCTION_CALL"/>
+    <option name="HURL_PREDICATE_KEYWORD" baseAttributes="DEFAULT_FUNCTION_CALL"/>
+    <option name="HURL_FILTER_KEYWORD" baseAttributes="DEFAULT_FUNCTION_CALL"/>
+    <option name="HURL_OPTION_KEYWORD" baseAttributes="DEFAULT_INSTANCE_FIELD"/>
+    <option name="HURL_STRING" baseAttributes="DEFAULT_STRING"/>
+    <option name="HURL_NUMBER" baseAttributes="DEFAULT_NUMBER"/>
+    <option name="HURL_BOOLEAN" baseAttributes="DEFAULT_KEYWORD"/>
+    <option name="HURL_NULL" baseAttributes="DEFAULT_KEYWORD"/>
+    <option name="HURL_COMMENT" baseAttributes="DEFAULT_LINE_COMMENT"/>
+    <option name="HURL_HEADER_KEY" baseAttributes="DEFAULT_INSTANCE_FIELD"/>
+    <option name="HURL_HEADER_VALUE" baseAttributes="DEFAULT_STRING"/>
+    <option name="HURL_TEMPLATE_VAR" baseAttributes="DEFAULT_TEMPLATE_LANGUAGE_COLOR"/>
+    <option name="HURL_TEMPLATE_BRACE" baseAttributes="DEFAULT_BRACES"/>
+    <option name="HURL_OPERATOR" baseAttributes="DEFAULT_OPERATION_SIGN"/>
+    <option name="HURL_KEY" baseAttributes="DEFAULT_INSTANCE_FIELD"/>
+    <option name="HURL_VALUE" baseAttributes="DEFAULT_STRING"/>
+    <option name="HURL_MULTILINE_STRING" baseAttributes="DEFAULT_STRING"/>
+    <option name="HURL_JSON" baseAttributes="DEFAULT_STRING"/>
+    <option name="HURL_BRACE" baseAttributes="DEFAULT_BRACES"/>
+</list>
