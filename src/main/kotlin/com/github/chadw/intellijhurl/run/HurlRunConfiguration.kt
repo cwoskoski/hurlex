@@ -35,6 +35,26 @@ class HurlRunConfiguration(
         get() = options.variablesFile
         set(value) { options.variablesFile = value }
 
+    var testMode: Boolean
+        get() = options.testMode
+        set(value) { options.testMode = value }
+
+    var verbose: Boolean
+        get() = options.verbose
+        set(value) { options.verbose = value }
+
+    var veryVerbose: Boolean
+        get() = options.veryVerbose
+        set(value) { options.veryVerbose = value }
+
+    var environmentVariables: String?
+        get() = options.environmentVariables
+        set(value) { options.environmentVariables = value }
+
+    var hurlExecutable: String?
+        get() = options.hurlExecutable
+        set(value) { options.hurlExecutable = value }
+
     override fun getConfigurationEditor(): SettingsEditor<out RunConfiguration> {
         return HurlRunConfigurationEditor(project)
     }

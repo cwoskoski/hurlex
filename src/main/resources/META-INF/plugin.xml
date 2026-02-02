@@ -98,6 +98,10 @@
         <runConfigurationProducer implementation="com.github.chadw.intellijhurl.run.HurlRunConfigurationProducer"/>
         <runLineMarkerContributor language="Hurl"
                                   implementationClass="com.github.chadw.intellijhurl.run.HurlLineMarkerProvider"/>
+
+        <!-- Notifications -->
+        <editorNotificationProvider
+                implementation="com.github.chadw.intellijhurl.run.HurlNotificationProvider"/>
     </extensions>
 
     <actions>

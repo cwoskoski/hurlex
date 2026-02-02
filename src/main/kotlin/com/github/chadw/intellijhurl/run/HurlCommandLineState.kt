@@ -2,7 +2,6 @@ package com.github.chadw.intellijhurl.run
 
 import com.intellij.execution.configurations.CommandLineState
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.execution.process.OSProcessHandler
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessHandlerFactory
 import com.intellij.execution.process.ProcessTerminatedListener
@@ -14,11 +13,24 @@ class HurlCommandLineState(
 ) : CommandLineState(environment) {
 
     override fun startProcess(): ProcessHandler {
-        val commandLine = GeneralCommandLine("hurl")
+        val executable = configuration.hurlExecutable?.takeIf { it.isNotBlank() } ?: "hurl"
+        val commandLine = GeneralCommandLine(executable)
 
         val filePath = configuration.hurlFilePath
         if (!filePath.isNullOrBlank()) {
             commandLine.addParameter(filePath)
+        }
+
+        // Test mode
+        if (configuration.testMode) {
+            commandLine.addParameter("--test")
+        }
+
+        // Verbose flags
+        if (configuration.veryVerbose) {
+            commandLine.addParameter("--very-verbose")
+        } else if (configuration.verbose) {
+            commandLine.addParameter("--verbose")
         }
 
         val options = configuration.hurlOptions
@@ -41,6 +53,18 @@ class HurlCommandLineState(
             val projectDir = environment.project.basePath
             if (projectDir != null) {
                 commandLine.workDirectory = java.io.File(projectDir)
+            }
+        }
+
+        // Environment variables
+        val envVars = configuration.environmentVariables
+        if (!envVars.isNullOrBlank()) {
+            envVars.split(";").filter { it.contains("=") }.forEach { pair ->
+                val key = pair.substringBefore("=").trim()
+                val value = pair.substringAfter("=").trim()
+                if (key.isNotBlank()) {
+                    commandLine.environment[key] = value
+                }
             }
         }
 
