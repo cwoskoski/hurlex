@@ -58,6 +58,10 @@ tasks {
         untilBuild.set("251.*")
     }
 
+    runPluginVerifier {
+        ideVersions.set(listOf("2024.1", "2024.2", "2024.3", "2025.1"))
+    }
+
     signPlugin {
         certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
         privateKey.set(System.getenv("PRIVATE_KEY"))
