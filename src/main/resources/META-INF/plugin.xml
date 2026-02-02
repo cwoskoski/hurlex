@@ -55,6 +55,14 @@
         <psi.referenceContributor language="Hurl"
                                   implementation="com.github.chadw.intellijhurl.reference.HurlReferenceContributor"/>
 
+        <!-- Documentation -->
+        <lang.documentationProvider language="Hurl"
+                                    implementationClass="com.github.chadw.intellijhurl.documentation.HurlDocumentationProvider"/>
+
+        <!-- Spell checking -->
+        <spellchecker.support language="Hurl"
+                              implementationClass="com.github.chadw.intellijhurl.spellcheck.HurlSpellcheckingStrategy"/>
+
         <!-- Formatting -->
         <lang.formatter language="Hurl"
                         implementationClass="com.github.chadw.intellijhurl.formatting.HurlFormattingModelBuilder"/>
