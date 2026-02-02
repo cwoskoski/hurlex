@@ -55,6 +55,12 @@
         <psi.referenceContributor language="Hurl"
                                   implementation="com.github.chadw.intellijhurl.reference.HurlReferenceContributor"/>
 
+        <!-- Navigation -->
+        <gotoSymbolContributor
+                implementation="com.github.chadw.intellijhurl.navigation.HurlChooseByNameContributor"/>
+        <breadcrumbsInfoProvider
+                implementation="com.github.chadw.intellijhurl.navigation.HurlBreadcrumbsProvider"/>
+
         <!-- Documentation -->
         <lang.documentationProvider language="Hurl"
                                     implementationClass="com.github.chadw.intellijhurl.documentation.HurlDocumentationProvider"/>
