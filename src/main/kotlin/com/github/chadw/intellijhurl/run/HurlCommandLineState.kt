@@ -13,12 +13,27 @@ class HurlCommandLineState(
 ) : CommandLineState(environment) {
 
     override fun startProcess(): ProcessHandler {
-        val executable = configuration.hurlExecutable?.takeIf { it.isNotBlank() } ?: "hurl"
-        val commandLine = GeneralCommandLine(executable)
+        val customPath = configuration.hurlExecutable?.takeIf { it.isNotBlank() }
+        val location = HurlExecutableUtil.findHurl(customPath)
+
+        val commandLine: GeneralCommandLine
+        if (location != null) {
+            // Use detected hurl (may be via WSL or direct)
+            val fullCommand = location.buildCommand()
+            commandLine = GeneralCommandLine(fullCommand)
+        } else {
+            // Fallback to bare "hurl" and let the OS error if not found
+            commandLine = GeneralCommandLine("hurl")
+        }
 
         val filePath = configuration.hurlFilePath
         if (!filePath.isNullOrBlank()) {
-            commandLine.addParameter(filePath)
+            // When running through WSL, convert Windows path to WSL path
+            if (location?.prefixArgs?.contains("wsl.exe") == true) {
+                commandLine.addParameter(toWslPath(filePath))
+            } else {
+                commandLine.addParameter(filePath)
+            }
         }
 
         // Test mode
@@ -43,7 +58,11 @@ class HurlCommandLineState(
         val variablesFile = configuration.variablesFile
         if (!variablesFile.isNullOrBlank()) {
             commandLine.addParameter("--variables-file")
-            commandLine.addParameter(variablesFile)
+            if (location?.prefixArgs?.contains("wsl.exe") == true) {
+                commandLine.addParameter(toWslPath(variablesFile))
+            } else {
+                commandLine.addParameter(variablesFile)
+            }
         }
 
         val workDir = configuration.workingDirectory
@@ -73,5 +92,25 @@ class HurlCommandLineState(
         val processHandler = ProcessHandlerFactory.getInstance().createColoredProcessHandler(commandLine)
         ProcessTerminatedListener.attach(processHandler)
         return processHandler
+    }
+
+    /**
+     * Convert a Windows path (e.g., C:\Users\foo\file.hurl) to a WSL path (/mnt/c/Users/foo/file.hurl).
+     */
+    private fun toWslPath(windowsPath: String): String {
+        // If it already looks like a Unix path, return as-is
+        if (windowsPath.startsWith("/")) return windowsPath
+
+        // Convert drive letter: C:\foo -> /mnt/c/foo
+        val normalized = windowsPath.replace("\\", "/")
+        val regex = Regex("^([A-Za-z]):/(.*)$")
+        val match = regex.matchEntire(normalized)
+        return if (match != null) {
+            val drive = match.groupValues[1].lowercase()
+            val rest = match.groupValues[2]
+            "/mnt/$drive/$rest"
+        } else {
+            normalized
+        }
     }
 }

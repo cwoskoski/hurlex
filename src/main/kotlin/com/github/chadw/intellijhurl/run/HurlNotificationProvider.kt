@@ -18,39 +18,23 @@ class HurlNotificationProvider : EditorNotificationProvider, DumbAware {
     ): Function<in FileEditor, out JComponent?> {
         return Function { _ ->
             if (file.fileType != HurlFileType) return@Function null
-            if (isHurlInstalled()) return@Function null
+
+            val location = HurlExecutableUtil.findHurl()
+            if (location != null) return@Function null
 
             EditorNotificationPanel(EditorNotificationPanel.Status.Warning).apply {
-                text = "Hurl CLI is not found on PATH. Install it to run .hurl files."
+                text = "Hurl CLI not found (checked PATH, common install locations, and WSL). Install it to run .hurl files."
                 createActionLabel("Installation Guide") {
                     com.intellij.ide.BrowserUtil.browse("https://hurl.dev/docs/installation.html")
                 }
+                createActionLabel("Retry Detection") {
+                    HurlExecutableUtil.clearCache()
+                    com.intellij.openapi.fileEditor.FileEditorManager.getInstance(project)
+                        .selectedEditors.forEach { it.file?.let { f ->
+                            com.intellij.ui.EditorNotifications.getInstance(project).updateNotifications(f)
+                        }}
+                }
             }
-        }
-    }
-
-    companion object {
-        private var cachedResult: Boolean? = null
-
-        fun isHurlInstalled(): Boolean {
-            cachedResult?.let { return it }
-
-            val result = try {
-                val process = ProcessBuilder("hurl", "--version")
-                    .redirectErrorStream(true)
-                    .start()
-                val exitCode = process.waitFor()
-                exitCode == 0
-            } catch (_: Exception) {
-                false
-            }
-
-            cachedResult = result
-            return result
-        }
-
-        fun clearCache() {
-            cachedResult = null
         }
     }
 }
