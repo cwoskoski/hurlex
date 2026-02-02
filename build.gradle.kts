@@ -9,7 +9,7 @@ plugins {
 }
 
 group = providers.gradleProperty("pluginGroup").get()
-version = providers.gradleProperty("pluginVersion").get()
+version = (System.getenv("VERSION") ?: providers.gradleProperty("pluginVersion").get())
 
 repositories {
     mavenCentral()
@@ -55,7 +55,22 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("241")
-        untilBuild.set("251.*")
+        untilBuild.set("253.*")
+
+        val changelogFile = file("CHANGELOG.md")
+        if (changelogFile.exists()) {
+            val changelog = changelogFile.readText()
+            val latestSection = Regex("""## \[.+?]\s*-?\s*.+?\n([\s\S]*?)(?=\n## |\z)""")
+                .find(changelog)?.groupValues?.get(1)?.trim()
+            if (!latestSection.isNullOrBlank()) {
+                val html = latestSection
+                    .replace(Regex("""^### (.+)$""", RegexOption.MULTILINE), "<b>$1</b>")
+                    .replace(Regex("""^- (.+)$""", RegexOption.MULTILINE), "<li>$1</li>")
+                    .replace(Regex("""(<li>.*</li>\s*)+"""), "<ul>\n$0</ul>\n")
+                    .trim()
+                changeNotes.set(html)
+            }
+        }
     }
 
     runPluginVerifier {

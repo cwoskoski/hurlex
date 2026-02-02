@@ -12,6 +12,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract changelog for release
+        id: changelog
+        run: |
+          # Extract the latest version section from CHANGELOG.md
+          section=$(sed -n '/^## \[/,/^## \[/{/^## \[.*'"${GITHUB_REF_NAME#v}"'/,/^## \[/{/^## \[.*'"${GITHUB_REF_NAME#v}"'/p;/^## \[.*'"${GITHUB_REF_NAME#v}"'/!{/^## \[/!p}}}' CHANGELOG.md)
+          if [ -z "$section" ]; then
+            section=$(sed -n '/^## \[/{p;:a;n;/^## \[/q;p;ba}' CHANGELOG.md)
+          fi
+          {
+            echo "NOTES<<EOF"
+            echo "$section"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -22,25 +40,41 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build plugin
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
         run: ./gradlew build
 
       - name: Run tests
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
         run: ./gradlew test
 
       - name: Verify plugin
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
         run: ./gradlew verifyPlugin
+
+      - name: Sign plugin
+        if: env.CERTIFICATE_CHAIN != ''
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
+        run: ./gradlew signPlugin
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: build/distributions/*.zip
-          generate_release_notes: true
+          body: ${{ steps.changelog.outputs.NOTES }}
 
       - name: Publish to JetBrains Marketplace
         if: env.PUBLISH_TOKEN != ''
         env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
-        run: ./gradlew signPlugin publishPlugin
+        run: ./gradlew publishPlugin

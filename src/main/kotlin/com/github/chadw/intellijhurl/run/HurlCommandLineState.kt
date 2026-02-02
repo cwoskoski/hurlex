@@ -98,16 +98,24 @@ class HurlCommandLineState(
      * Convert a Windows path (e.g., C:\Users\foo\file.hurl) to a WSL path (/mnt/c/Users/foo/file.hurl).
      */
     private fun toWslPath(windowsPath: String): String {
+        val normalized = windowsPath.replace("\\", "/")
+
+        // Handle WSL UNC paths: //wsl.localhost/<Distro>/path or //wsl$//<Distro>/path
+        val wslUncRegex = Regex("^//wsl(?:\\.localhost|\\$)/[^/]+(/.*)")
+        val wslUncMatch = wslUncRegex.matchEntire(normalized)
+        if (wslUncMatch != null) {
+            return wslUncMatch.groupValues[1]
+        }
+
         // If it already looks like a Unix path, return as-is
-        if (windowsPath.startsWith("/")) return windowsPath
+        if (normalized.startsWith("/")) return normalized
 
         // Convert drive letter: C:\foo -> /mnt/c/foo
-        val normalized = windowsPath.replace("\\", "/")
-        val regex = Regex("^([A-Za-z]):/(.*)$")
-        val match = regex.matchEntire(normalized)
-        return if (match != null) {
-            val drive = match.groupValues[1].lowercase()
-            val rest = match.groupValues[2]
+        val driveRegex = Regex("^([A-Za-z]):/(.*)$")
+        val driveMatch = driveRegex.matchEntire(normalized)
+        return if (driveMatch != null) {
+            val drive = driveMatch.groupValues[1].lowercase()
+            val rest = driveMatch.groupValues[2]
             "/mnt/$drive/$rest"
         } else {
             normalized
