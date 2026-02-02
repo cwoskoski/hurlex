@@ -1,0 +1,73 @@
+<templateSet group="Hurl">
+    <template name="get" value="GET $URL$&#10;HTTP $STATUS$&#10;" description="GET request with status assertion" toReformat="false" toShortenFQNames="false">
+        <variable name="URL" expression="" defaultValue="&quot;http://localhost:8080&quot;" alwaysStopAt="true"/>
+        <variable name="STATUS" expression="" defaultValue="&quot;200&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Hurl" value="true"/>
+        </context>
+    </template>
+    <template name="post" value="POST $URL$&#10;Content-Type: application/json&#10;{&#10;  $BODY$&#10;}&#10;&#10;HTTP $STATUS$&#10;" description="POST request with JSON body" toReformat="false" toShortenFQNames="false">
+        <variable name="URL" expression="" defaultValue="&quot;http://localhost:8080&quot;" alwaysStopAt="true"/>
+        <variable name="BODY" expression="" defaultValue="&quot;\&quot;key\&quot;: \&quot;value\&quot;&quot;" alwaysStopAt="true"/>
+        <variable name="STATUS" expression="" defaultValue="&quot;201&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Hurl" value="true"/>
+        </context>
+    </template>
+    <template name="postform" value="POST $URL$&#10;[FormParams]&#10;$FIELD$: $VALUE$&#10;&#10;HTTP $STATUS$&#10;" description="POST request with form parameters" toReformat="false" toShortenFQNames="false">
+        <variable name="URL" expression="" defaultValue="&quot;http://localhost:8080&quot;" alwaysStopAt="true"/>
+        <variable name="FIELD" expression="" defaultValue="&quot;field1&quot;" alwaysStopAt="true"/>
+        <variable name="VALUE" expression="" defaultValue="&quot;value1&quot;" alwaysStopAt="true"/>
+        <variable name="STATUS" expression="" defaultValue="&quot;200&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Hurl" value="true"/>
+        </context>
+    </template>
+    <template name="put" value="PUT $URL$&#10;Content-Type: application/json&#10;{&#10;  $BODY$&#10;}&#10;&#10;HTTP $STATUS$&#10;" description="PUT request with JSON body" toReformat="false" toShortenFQNames="false">
+        <variable name="URL" expression="" defaultValue="&quot;http://localhost:8080&quot;" alwaysStopAt="true"/>
+        <variable name="BODY" expression="" defaultValue="&quot;\&quot;key\&quot;: \&quot;value\&quot;&quot;" alwaysStopAt="true"/>
+        <variable name="STATUS" expression="" defaultValue="&quot;200&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Hurl" value="true"/>
+        </context>
+    </template>
+    <template name="delete" value="DELETE $URL$&#10;HTTP $STATUS$&#10;" description="DELETE request" toReformat="false" toShortenFQNames="false">
+        <variable name="URL" expression="" defaultValue="&quot;http://localhost:8080&quot;" alwaysStopAt="true"/>
+        <variable name="STATUS" expression="" defaultValue="&quot;204&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Hurl" value="true"/>
+        </context>
+    </template>
+    <template name="assert" value="[Asserts]&#10;status == $STATUS$&#10;$QUERY$ $PREDICATE$ $EXPECTED$&#10;" description="Assert block with status check" toReformat="false" toShortenFQNames="false">
+        <variable name="STATUS" expression="" defaultValue="&quot;200&quot;" alwaysStopAt="true"/>
+        <variable name="QUERY" expression="" defaultValue="&quot;jsonpath \&quot;$.key\&quot;&quot;" alwaysStopAt="true"/>
+        <variable name="PREDICATE" expression="" defaultValue="&quot;==&quot;" alwaysStopAt="true"/>
+        <variable name="EXPECTED" expression="" defaultValue="&quot;\&quot;value\&quot;&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Hurl" value="true"/>
+        </context>
+    </template>
+    <template name="capture" value="[Captures]&#10;$VAR_NAME$: $QUERY$ $EXPRESSION$&#10;" description="Capture block with variable" toReformat="false" toShortenFQNames="false">
+        <variable name="VAR_NAME" expression="" defaultValue="&quot;token&quot;" alwaysStopAt="true"/>
+        <variable name="QUERY" expression="" defaultValue="&quot;jsonpath&quot;" alwaysStopAt="true"/>
+        <variable name="EXPRESSION" expression="" defaultValue="&quot;\&quot;$.token\&quot;&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Hurl" value="true"/>
+        </context>
+    </template>
+    <template name="auth" value="[BasicAuth]&#10;$USERNAME$: $PASSWORD$&#10;" description="BasicAuth section" toReformat="false" toShortenFQNames="false">
+        <variable name="USERNAME" expression="" defaultValue="&quot;user&quot;" alwaysStopAt="true"/>
+        <variable name="PASSWORD" expression="" defaultValue="&quot;password&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Hurl" value="true"/>
+        </context>
+    </template>
+    <template name="options" value="[Options]&#10;retry: $RETRY$&#10;retry-interval: $INTERVAL$&#10;verbose: $VERBOSE$&#10;" description="Options section with retry" toReformat="false" toShortenFQNames="false">
+        <variable name="RETRY" expression="" defaultValue="&quot;3&quot;" alwaysStopAt="true"/>
+        <variable name="INTERVAL" expression="" defaultValue="&quot;1000&quot;" alwaysStopAt="true"/>
+        <variable name="VERBOSE" expression="" defaultValue="&quot;true&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Hurl" value="true"/>
+        </context>
+    </template>
+</templateSet>

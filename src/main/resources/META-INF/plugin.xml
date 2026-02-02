@@ -55,10 +55,25 @@
         <psi.referenceContributor language="Hurl"
                                   implementation="com.github.chadw.intellijhurl.reference.HurlReferenceContributor"/>
 
+        <!-- Templates -->
+        <internalFileTemplate name="Hurl File"/>
+        <defaultLiveTemplates file="/liveTemplates/Hurl.xml"/>
+        <liveTemplateContext
+                implementation="com.github.chadw.intellijhurl.template.HurlLiveTemplateContext"/>
+
         <!-- Run -->
         <configurationType implementation="com.github.chadw.intellijhurl.run.HurlConfigurationType"/>
         <runConfigurationProducer implementation="com.github.chadw.intellijhurl.run.HurlRunConfigurationProducer"/>
         <runLineMarkerContributor language="Hurl"
                                   implementationClass="com.github.chadw.intellijhurl.run.HurlLineMarkerProvider"/>
     </extensions>
+
+    <actions>
+        <action id="Hurl.NewFile"
+                class="com.github.chadw.intellijhurl.template.HurlCreateFileAction"
+                text="Hurl File"
+                description="Create a new Hurl HTTP test file">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
