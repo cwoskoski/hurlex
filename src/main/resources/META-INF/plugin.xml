@@ -55,6 +55,26 @@
         <psi.referenceContributor language="Hurl"
                                   implementation="com.github.chadw.intellijhurl.reference.HurlReferenceContributor"/>
 
+        <!-- Inspections -->
+        <localInspection language="Hurl"
+                         implementationClass="com.github.chadw.intellijhurl.inspection.HurlDuplicateHeaderInspection"
+                         displayName="Duplicate header in request"
+                         groupName="Hurl"
+                         enabledByDefault="true"
+                         level="WARNING"/>
+        <localInspection language="Hurl"
+                         implementationClass="com.github.chadw.intellijhurl.inspection.HurlEmptySectionInspection"
+                         displayName="Empty section"
+                         groupName="Hurl"
+                         enabledByDefault="true"
+                         level="WEAK WARNING"/>
+        <localInspection language="Hurl"
+                         implementationClass="com.github.chadw.intellijhurl.inspection.HurlInvalidStatusCodeInspection"
+                         displayName="Invalid HTTP status code"
+                         groupName="Hurl"
+                         enabledByDefault="true"
+                         level="WARNING"/>
+
         <!-- Templates -->
         <internalFileTemplate name="Hurl File"/>
         <defaultLiveTemplates file="/liveTemplates/Hurl.xml"/>
