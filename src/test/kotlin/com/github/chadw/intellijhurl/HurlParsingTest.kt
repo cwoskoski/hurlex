@@ -13,6 +13,26 @@ class HurlParsingTest : ParsingTestCase("", "hurl", HurlParserDefinition()) {
         doTest(true)
     }
 
+    fun testSimpleGet() {
+        doTest(true)
+    }
+
+    fun testPostWithJson() {
+        doTest(true)
+    }
+
+    fun testMultipleEntries() {
+        doTest(true)
+    }
+
+    fun testCapturesAndVariables() {
+        doTest(true)
+    }
+
+    fun testAllSections() {
+        doTest(true)
+    }
+
     override fun skipSpaces(): Boolean = false
     override fun includeRanges(): Boolean = true
 }
