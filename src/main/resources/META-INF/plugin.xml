@@ -55,6 +55,10 @@
         <psi.referenceContributor language="Hurl"
                                   implementation="com.github.chadw.intellijhurl.reference.HurlReferenceContributor"/>
 
+        <!-- Formatting -->
+        <lang.formatter language="Hurl"
+                        implementationClass="com.github.chadw.intellijhurl.formatting.HurlFormattingModelBuilder"/>
+
         <!-- Inspections -->
         <localInspection language="Hurl"
                          implementationClass="com.github.chadw.intellijhurl.inspection.HurlDuplicateHeaderInspection"
